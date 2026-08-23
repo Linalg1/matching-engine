@@ -28,9 +28,9 @@ public final class Simulation {
 
     private void step() {
         tick++;
-        var view = new BookView(book.bestbid(), book.bestask(), lastTradePrice, tick);
 
         for (var strategy : strategies) {
+            var view = new BookView(book.bestbid(), book.bestask(), lastTradePrice, tick);
             var pos = positions.get(strategy.name());
 
             for (var order : strategy.onTick(view, pos)) {
