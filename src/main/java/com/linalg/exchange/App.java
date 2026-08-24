@@ -1,19 +1,24 @@
 package com.linalg.exchange;
 
+import java.io.IOException;
 import java.util.List;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        long[] qqq = PriceLoader.loadCloses("data/qqq.csv", 1);
+        System.out.println("Prix chargés : " + qqq.length + ", premier = " + qqq[0]);
+
         var sim = new Simulation(
             List.of(
                 new NaiveMarketMaker(2, 10),
-                new NoiseTrader(42)
-                //new TrendFollower(20)
+                new NoiseTrader(42),
+                new ExternalPriceFollower(qqq)
             ),
-            10_000    // prix initial en ticks
+            qqq[0]
         );
 
-        sim.run(10_000);
+        sim.run(qqq.length);
         sim.printResults();
     }
 }
